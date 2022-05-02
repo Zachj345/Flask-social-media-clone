@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} Base {% endblock %}</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      .headie {
+        margin: 30px 30px 30px 20px;
+        text-align: center;
+        text-decoration: none;
+        font-family: Snell Roundhand, cursive;
+        font-size: 450%;
+      }
+      body {
+        background: radial-gradient(#3b4850, #c5b6e6);
+      }
+      .director {
+        text-decoration: none;
+        color: beige;
+        font-size: 120%;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        margin-left: -10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="collapse" id="navbarToggleExternalContent">
+      <div class="bg-dark p-4">
+        {%if user.is_authenticated%}
+        <a class="nav-item nav-link director" id="home" href="/"> Home </a>
+        <a
+          class="nav-item nav-link director"
+          id="profile"
+          href="/profile/{{user.username}}"
+          >Profile
+        </a>
+        <a class="nav-item nav-link director" id="logout" href="/logout"
+          >Logout
+        </a>
+        {% else %}
+        <a class="nav-item nav-link director" id="login" href="/log-in">
+          Login
+        </a>
+        <a class="nav-item nav-link director" id="sign_up" href="/sign-up"
+          >Sign Up</a
+        >
+        {% endif %}
+      </div>
+    </div>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarToggleExternalContent"
+          aria-controls="navbarToggleExternalContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </nav>
+
+    <section>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% else %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {%endif%} {%endfor%} {% endif %} {%endwith%}
+    </section>
+
+    <h1 class="headie">The Social</h1>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/4137d99c06.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='index.js')}}"
+    ></script>
+  </body>
+  {%block content%} {%endblock%}
+</html>

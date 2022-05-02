@@ -1,0 +1,70 @@
+<html>
+  <title>{% block title %} Login page {%endblock%}</title>
+  {% extends 'base.html' %} {%block content%}
+  <head>
+    <style>
+      .opening {
+        font-size: 36px;
+        font-family: fantasy;
+        text-align: center;
+        margin: 10px;
+      }
+      .entry {
+        font-size: 28px;
+        font-family: fantasy;
+        text-align: center;
+        margin: 10px;
+      }
+      .block {
+        width: 82%;
+        text-align: center;
+        margin: auto;
+      }
+      .sub-button {
+          float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <br />
+    <h1 class="opening">Welcome back!</h1>
+    <br>
+    <p class="entry">Please enter your username and password</p>
+    
+    <br>
+    <div class="block">
+        <hr>
+        <form method="POST" autocomplete="off">
+            <h3 align="center"></h3>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="form-control"
+                placeholder="Enter your Username"
+              />
+              <br />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your unique password"
+              />
+            </div>
+            
+            <br />
+            <button type="submit" class="btn btn-dark sub-button">Enter</button>
+          </form>
+        </div>
+
+    </div>
+  </body>
+  <footer></footer>
+  {%endblock%}
+</html>

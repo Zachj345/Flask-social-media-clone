@@ -1,0 +1,224 @@
+<html>
+  <title>{% block title %} Home page {%endblock%}</title>
+  {% extends 'base.html' %} {% block content %}
+  <head>
+    <style>
+       .opening {
+        width: 60%;
+        text-align: center;
+        margin: auto;
+      }
+       * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        }
+      .header1 {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        text-decoration: wavy;
+        text-align: center;
+      }
+
+      .post-title {
+        float: right;
+        height: 45px;
+        text-align: left;
+      }
+      .post-container {
+        width: 65%;
+        margin: auto;
+        margin-bottom: 35px;
+      }
+      .profile-btn {
+        padding-bottom: 1px;
+        padding-top: 1px;
+        float: right;
+      }
+      .post-text {
+        text-align: left;
+        text-decoration: none;
+        font-size: 150%;
+      }
+      .time {
+        text-align: left;
+        text-decoration: none;
+        font-size: 115%;
+      }
+      .comment-container { 
+        height: 10%;
+      }
+
+      .comment-container i {
+        position: absolute;
+        margin: 15px 0px 12px 15px ;
+        padding-left: 1px;
+
+      }
+      .comment {
+        width: 60%;
+        padding-left: 28px;
+        margin-left: 10px;
+        min-width: 175px;
+
+      }
+      .comment-button {
+       margin-left: 10px;
+       
+        
+      }
+      .delete-button {
+          float: right;
+          width: 100%;
+      }
+      .delete-container {
+          float: right;  
+          
+      }
+      .like-btn {
+          float: left;
+          text-decoration: none;
+          font-style: normal;
+          margin-top: 3px;
+          margin-bottom: -1px;
+      
+      }
+      .comments-section {
+        float: right;
+      }
+      .comment-text {
+        list-style: none;
+        padding-left: 10%;
+        margin-right: 10px;
+        
+        
+      }
+      .delete-comment {
+        position: fixed;
+        right: 10px;
+        margin-left: 10px;
+        
+      }
+      .like-count {
+        float: left;
+        font-size: 140%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="opening">
+      <h1 class="header1">Welcome to {{username | title}}'s profile!</h1>
+      <hr />
+    </div>
+
+    <div id="posts-reload">
+      {% for post in users_posts %}
+      <div class="card text-center post-container" >
+        <div class="card-header post-title">
+          @{{post.user.username | title}} &nbsp; 
+           &nbsp; <a href="/profile/{{post.user.username}}" class="btn btn-primary profile-btn">View Profile</a>
+        </div>
+        <div class="card-body">
+          <p class="card-title post-text">"{{post.deets}}"</p>
+          <br>
+          <p class="card-text time">
+            {{(post.time - correct_time).strftime('%m-%d, %I:%M %p')}}
+          </p>
+          
+          
+          <br />
+          <div id="form-reload-{{post.id}}">
+          <form onsubmit="return addComment({{post.id}})" id="comment-form-{{post.id}}" method="POST" 
+          action="/add-comment/{{post.id}}" autocomplete="off">
+            <label for="Comment"></label>
+            <div class="comment-container">
+              <i class="fa-solid fa-comment-dots fa-lg"></i>
+              <input
+                name="comment"
+                type="text"
+                id="comment-{{post.id}}"
+                class="comment"
+                placeholder="Add a comment"
+              />
+              <button type="submit" id="comment-button-{{post.id}}" class="comment-button">Comment</button>
+            </form>
+            </div>
+            <div id="options-{{post.id}}">
+              {%if post.comments %}
+              
+              <div class="btn-group dropup comments-section" id="comment-section-{{post.id}}" >
+                
+                <button type="button" class="btn btn-secondary dropdown-toggle" 
+                data-bs-toggle="dropdown" aria-expanded="false">
+                  {% if post.comments|length > 1%} View {{post.comments|length}}
+                  comments {%else%} View {{post.comments|length}} comment {%endif%}
+                </button>
+                
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  {%for comment in post.comments%}
+                
+                  <li class="comment-text" id="comment-text-{{comment.id}}">
+                    {{comment.user.username | title}}: &nbsp;{{comment.text}} &nbsp;&nbsp;&nbsp;
+                    {%if user.id == comment.author or user.id == post.author%}
+                      
+                        <button type="button" onclick="deleteComment({{comment.id}})" id="deleteCom-{{comment.id}}"
+                          class="btn btn-danger btn-sm delete-comment">&#x2715;</button>
+                      
+                    {%endif%}
+                    &nbsp;&nbsp;&nbsp;
+                  </li>
+                  <br>
+                  
+                  
+                  
+                  {%endfor%}
+                </ul>
+               
+                
+              </div>
+            
+                {%else%}
+                <div id="no-comments-{{post.id}}">
+                <button type="button" id="blank-comment-section" class="btn btn-secondary" style="float: right;" disabled>
+                  No comments available
+                </button>
+                </div>
+                {%endif%}
+              
+            </div>
+          </div>
+            
+            
+          
+         
+          
+        </div>
+        <div class="card-footer ">
+          
+          {% set postid = post.id %}
+          {% if user.id in post.likes | map(attribute='author')|list %}
+          <i style="float: left; text-decoration: none; margin-top: 3px; margin-bottom: -1px;" 
+          id="like-button-{{post.id}}" 
+          class="fa-solid fa-heart fa-2x like-btn" onclick="like({{postid}})">&nbsp;&nbsp; </i><span 
+          id="like-count-{{postid}}" class="like-count" > {{post.likes|length}}</span>
+          {%else%}
+          <i style="float: left; text-decoration: none; margin-top: 3px; margin-bottom: -1px;" 
+          class="fa-regular fa-heart fa-2x like-btn"
+          id="like-button-{{post.id}}" onclick="like({{postid}})">&nbsp;&nbsp; </i><span 
+          id="like-count-{{postid}}" class="like-count" >{{post.likes|length}}</span>
+          {%endif%}
+       
+            {%if user.id == post.author%}
+            <span class="delete-container" id="del-button" onclick="deletePost({{post.id}})"> 
+              <button class="btn btn-danger delete-btn">Delete Post</button></span>
+              {%endif%}
+        </div>
+      </div>
+      {%endfor%}
+      </div>
+    <br>
+  </body>
+
+  <footer></footer>
+
+  {%endblock%}
+</html>
