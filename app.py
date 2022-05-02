@@ -109,10 +109,10 @@ def profile(username):
                            correct_time=correct_time, username=username)
 
 
-@app.route('/delete-acct/<id>', methods=['GET', 'POST'])
+@app.route('/delete-acct/<username>', methods=['GET', 'POST'])
 @login_required
-def delete_acct(id):
-    user = User.query.filter_by(id=id).first()
+def delete_acct(username):
+    user = User.query.filter_by(username=username).first()
     if not user:
         flash('Sorry that user doesn\'t exist.', category='error')
     elif current_user.id != user.id:
