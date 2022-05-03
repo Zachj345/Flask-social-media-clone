@@ -144,9 +144,6 @@ def delete_post(post_id):
         db.session.delete(post)
         db.session.commit()
         flash('Post successfully deleted!', category='success')
-    print([i for i in Post.query.all()])
-    print([i for i in Comment.query.all()])
-    print([i for i in Like.query.all()])
     return jsonify({'success': 'facts',
                     'postId': post_id})
 
@@ -212,7 +209,7 @@ def like_post(post_id):
         like = Like(author=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-    print([i for i in Like.query.all()])
+
     return jsonify({'likes': len(post.likes),
                     'liked': current_user.id in map(lambda n: n.author, post.likes)})
 
