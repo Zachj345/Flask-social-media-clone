@@ -118,6 +118,12 @@ def delete_acct(username):
     elif current_user.id != user.id:
         flash('you aren\'t authorized to delete this acct', category='error')
     else:
+        if user.likes:
+            [db.session.delete(i) for i in user.likes]
+        if user.comments:
+            [db.session.delete(i) for i in user.comments]
+        if user.posts:
+            [db.session.delete(i) for i in user.posts]
         db.session.delete(user)
         db.session.commit()
         flash('user successfully deleted!', category='success')
